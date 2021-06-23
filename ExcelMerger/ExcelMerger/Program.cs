@@ -55,6 +55,14 @@ namespace ExcelMerger
                     break;
             }
 
+            if (joinType == Join.right) {
+                string placeHolder = path1;
+                path1 = path2;
+                path2 = placeHolder;
+
+                joinType = Join.left;
+            }
+
             switch (Path.GetExtension(path1).ToUpper()) {
                 case ".CSV": List<string> s = mergeCSV(path1, path2, joinType);
                     foreach (string line in s) {
@@ -156,40 +164,48 @@ namespace ExcelMerger
             sortedLines1.Sort();
             sortedLines2.Sort();
 
-            switch (joinType) {
-                 case Join.inner:
-                     int currntPos = 0;
-                     foreach (string line in sortedLines1) {
-                         while (true) {
+            int currntPos = 0;
+            foreach (string line in sortedLines1) {
+                while (true) {
 
-                            if (currntPos >= sortedLines2.Count())
-                                break;
+                   if (currntPos >= sortedLines2.Count())
+                       break;
 
-                             string line2 = sortedLines2[currntPos];
-                             if (line2.Length <= 0)
-                                 break;
+                    string line2 = sortedLines2[currntPos];
+                    if (line2.Length <= 0)
+                        break;
 
-                             string line2IDValue = line2.Split(DELIMITER)[0];
-                 
-                             int compareValue = line.Split(DELIMITER)[0].CompareTo(line2IDValue);
-                 
-                             if (compareValue < 0)
-                                 break;
-                 
-                             if (compareValue == 0) {
-                                 finalCSV.Add((line + DELIMITER + line2.Replace(line2IDValue + DELIMITER, "")).Replace(DELIMITER + DELIMITER,DELIMITER));
-                                 break;
-                             }
-                 
-                             if (compareValue > 0)
-                                 currntPos++;
-                         }
-                     }
-                    return finalCSV;
+                    string line2IDValue = line2.Split(DELIMITER)[0];
+            
+                    int compareValue = line.Split(DELIMITER)[0].CompareTo(line2IDValue);
 
+                    if (compareValue < 0){
+
+                        if (joinType == Join.inner)
+                            break;
+
+                        else if (joinType == Join.left) {
+                            string customLine = line;
+                            foreach (var _ in line2.Split(DELIMITER)) {
+                                customLine += DELIMITER;
+                            }
+                            customLine = customLine.Remove(customLine.Length - 1);
+                            finalCSV.Add(customLine);
+                            break;
+                        }
+                        
+                    }
+            
+                    if (compareValue == 0) {
+                        finalCSV.Add((line + DELIMITER + line2.Replace(line2IDValue + DELIMITER, "")).Replace(DELIMITER + DELIMITER,DELIMITER));
+                        break;
+                    }
+            
+                    if (compareValue > 0)
+                        currntPos++;
+                }
             }
-            Console.WriteLine("Error2: Faulty join");
-            return null;
+            return finalCSV;
         }
     }
 }
