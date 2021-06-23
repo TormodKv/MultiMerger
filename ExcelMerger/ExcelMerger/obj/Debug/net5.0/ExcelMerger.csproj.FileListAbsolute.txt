@@ -1,0 +1,16 @@
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.exe
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.deps.json
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.runtimeconfig.json
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.runtimeconfig.dev.json
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.dll
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ref\ExcelMerger.dll
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\bin\Debug\net5.0\ExcelMerger.pdb
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.csproj.AssemblyReference.cache
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.AssemblyInfoInputs.cache
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.AssemblyInfo.cs
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.csproj.CoreCompileInputs.cache
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.dll
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ref\ExcelMerger.dll
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.pdb
+C:\Users\tormod.kvitberg\source\repos\ExcelMerger\ExcelMerger\obj\Debug\net5.0\ExcelMerger.genruntimeconfig.cache
