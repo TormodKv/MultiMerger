@@ -10,7 +10,8 @@ namespace ExcelMerger
         outer,
         left,
         right,
-        inner
+        inner,
+        full
     }
 
     class Program
@@ -41,12 +42,18 @@ namespace ExcelMerger
             {
                 bool joinAssigned = true;
                 Console.WriteLine("\nChoose join type:");
-                Console.WriteLine("inner (default), outer, left, right");
+                Console.WriteLine("1) inner (default)\n2) left\n3) outer\n4) right\n5) full");
                 switch (Console.ReadLine()) {
+                    case "1":
                     case "inner": joinType = Join.inner; break;
+                    case "2":
                     case "left": joinType = Join.left; break;
+                    case "3":
                     case "outer": joinType = Join.outer; break;
+                    case "4":
                     case "right": joinType = Join.right; break;
+                    case "5":
+                    case "full": joinType = Join.full; break;
                     case "": joinType = Join.inner; break;
                     default: joinAssigned = false; break;
                 }
@@ -55,7 +62,9 @@ namespace ExcelMerger
                     break;
             }
 
+            //Swap the paths to effectively swap left and right areas of the join
             if (joinType == Join.right) {
+
                 string placeHolder = path1;
                 path1 = path2;
                 path2 = placeHolder;
@@ -63,16 +72,31 @@ namespace ExcelMerger
                 joinType = Join.left;
             }
 
+            List<string> fileLines = new List<string>();
+
             switch (Path.GetExtension(path1).ToUpper()) {
-                case ".CSV": List<string> s = mergeCSV(path1, path2, joinType);
-                    foreach (string line in s) {
-                        Console.WriteLine(line);
-                    }
+                case ".CSV": fileLines = mergeCSV(path1, path2, joinType);
+
                     break;
                 default: Console.WriteLine("Unsupported file format"); break;
             }
 
+            string extension = Path.GetExtension(path1);
+
+            //save file
+            StreamWriter newFile = File.CreateText(Path.GetDirectoryName(path1).ToString() 
+                + "\\" + Path.GetFileName(path1).Replace(extension, "") + "_" + Path.GetFileName(path2).Replace(extension, "") + "_" + 
+                joinType.ToString() + "-" + "joined" + Path.GetExtension(path1));
+
+            foreach (string line in fileLines) {
+                newFile.WriteLine(line);
+            }
+
+            newFile.Close();
+            newFile.Dispose();
         }
+
+
 
         private static List<string> mergeCSV(string path1, string path2, Join joinType)
         {
@@ -157,7 +181,7 @@ namespace ExcelMerger
             List<string> finalCSV = new List<string>();
 
             //Add header
-            finalCSV.Add(sortedLines1[0].ToUpper() + sortedLines2[0].Replace(sortedLines2[0].Split(DELIMITER)[0], "").Replace(DELIMITER + DELIMITER, DELIMITER));
+            finalCSV.Add((sortedLines1[0] + sortedLines2[0].Replace(sortedLines2[0].Split(DELIMITER)[0], "").Replace(DELIMITER + DELIMITER, DELIMITER)).ToUpper());
 
             sortedLines1.RemoveAt(0);
             sortedLines2.RemoveAt(0);
@@ -179,12 +203,13 @@ namespace ExcelMerger
             
                     int compareValue = line.Split(DELIMITER)[0].CompareTo(line2IDValue);
 
+                    //The left part of the join
                     if (compareValue < 0){
 
                         if (joinType == Join.inner)
                             break;
 
-                        else if (joinType == Join.left) {
+                        else if (joinType == Join.left || joinType == Join.full || joinType == Join.outer) {
                             string customLine = line;
                             foreach (var _ in line2.Split(DELIMITER)) {
                                 customLine += DELIMITER;
@@ -196,13 +221,35 @@ namespace ExcelMerger
                         
                     }
             
+                    //Middle part of the join
                     if (compareValue == 0) {
+
+                        if (joinType == Join.outer) {
+                            break;
+                        }
+
                         finalCSV.Add((line + DELIMITER + line2.Replace(line2IDValue + DELIMITER, "")).Replace(DELIMITER + DELIMITER,DELIMITER));
                         break;
                     }
-            
-                    if (compareValue > 0)
+
+                    //Right part of the join
+                    if (compareValue > 0) { 
+
+                        if (joinType == Join.full || joinType == Join.outer) {
+                            string customLine = "";
+                            foreach (var _ in line.Split(DELIMITER))
+                            {
+                                customLine += DELIMITER;
+                            }
+                            customLine = customLine.Remove(customLine.Length - 1);
+                            customLine += line2;
+                            finalCSV.Add(customLine);
+                        }
+
                         currntPos++;
+                    }
+
+                        
                 }
             }
             return finalCSV;
